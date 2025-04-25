@@ -1,0 +1,9 @@
+# Ignore the BCCD dataset folder
+BCCD Dataset with mask/
+
+# Ignore the assets folder
+assets/
+
+*pth
+*.idea
+__pycache__/
