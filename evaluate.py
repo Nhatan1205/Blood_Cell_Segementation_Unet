@@ -128,7 +128,7 @@ def visualize_prediction_binary_with_accuracy(model_path, image_path, mask_path,
 # 🔥 Gọi hàm kiểm tra (đã cập nhật cho 2 class và accuracy)
 visualize_prediction_binary_with_accuracy(
     model_path='./models/unet_best.pth',
-    image_path='./data/BCCD Dataset with mask/test/original/e11515b4-9527-4c23-a0ba-43719bacca0d.png',
-    mask_path='./data/BCCD Dataset with mask/test/mask/e11515b4-9527-4c23-a0ba-43719bacca0d.png',
+    image_path='./data/BCCD Dataset with mask/test/original/fe1ee954-ba71-47b3-954a-d20ab940cd7b.png',
+    mask_path='./data/BCCD Dataset with mask/test/mask/fe1ee954-ba71-47b3-954a-d20ab940cd7b.png',
     save_overlay=True  # Lưu ảnh overlay vào thư mục assets
 )
