@@ -7,6 +7,7 @@ from PIL import Image
 import albumentations as A
 from albumentations.pytorch import ToTensorV2
 import segmentation_models_pytorch as smp  # Import U-Net from segmentation_models_pytorch
+
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 
 # 🎨 Color palette for classes: Background, Blood Cell
@@ -135,7 +136,7 @@ def visualize_prediction_binary_with_accuracy(model_path, image_path, mask_path,
 # 🔥 Call the function for testing
 visualize_prediction_binary_with_accuracy(
     model_path='./models/unet_best1.pth',  # Path to your trained model
-    image_path='./data/BCCD Dataset with mask/test/original/e11515b4-9527-4c23-a0ba-43719bacca0d.png',
-    mask_path='./data/BCCD Dataset with mask/test/mask/e11515b4-9527-4c23-a0ba-43719bacca0d.png',
+    image_path='./data/BCCD Dataset with mask/test/original/fe1ee954-ba71-47b3-954a-d20ab940cd7b.png',
+    mask_path='./data/BCCD Dataset with mask/test/mask/fe1ee954-ba71-47b3-954a-d20ab940cd7b.png',
     save_overlay=True  # Save the overlay images
 )
