@@ -14,6 +14,23 @@ COLOR_PALETTE = [
     (255, 255, 255), # Blood Cell (trắng)
 ]
 
+# def visualize_segmentation_map_binary(image, mask):
+#     """Tạo overlay mask màu lên ảnh gốc (cho 2 class)"""
+#     image = np.array(image).astype(np.uint8)  # Chuyển ảnh về numpy
+#     h, w = mask.shape
+#     colored_mask = np.zeros((h, w, 3), dtype=np.uint8)
+
+#     # Áp màu theo từng class
+#     for class_id, color in enumerate(COLOR_PALETTE):
+#         colored_mask[mask == class_id] = color
+
+#     # Chuyển ảnh về BGR (OpenCV)
+#     bgr_image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+
+#     # Overlay với ảnh gốc
+#     overlayed_image = cv2.addWeighted(bgr_image, 0.6, colored_mask, 0.4, 0)
+
+#     return overlayed_image, colored_mask
 def visualize_segmentation_map_binary(image, mask):
     """Tạo overlay mask màu lên ảnh gốc (cho 2 class)"""
     image = np.array(image).astype(np.uint8)  # Chuyển ảnh về numpy
@@ -24,13 +41,17 @@ def visualize_segmentation_map_binary(image, mask):
     for class_id, color in enumerate(COLOR_PALETTE):
         colored_mask[mask == class_id] = color
 
+    # Resize the mask to match the image size
+    image_resized = cv2.resize(image, (mask.shape[1], mask.shape[0]), interpolation=cv2.INTER_NEAREST)
+
     # Chuyển ảnh về BGR (OpenCV)
-    bgr_image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+    bgr_image = cv2.cvtColor(image_resized, cv2.COLOR_RGB2BGR)
 
     # Overlay với ảnh gốc
     overlayed_image = cv2.addWeighted(bgr_image, 0.6, colored_mask, 0.4, 0)
 
     return overlayed_image, colored_mask
+
 
 def visualize_prediction_binary_with_accuracy(model_path, image_path, mask_path, save_overlay=False, device=None):
     """Hiển thị ảnh gốc, mask thật, mask dự đoán (binary), overlay và accuracy"""
@@ -127,8 +148,11 @@ def visualize_prediction_binary_with_accuracy(model_path, image_path, mask_path,
 
 # 🔥 Gọi hàm kiểm tra (đã cập nhật cho 2 class và accuracy)
 visualize_prediction_binary_with_accuracy(
-    model_path='./models/unet_best.pth',
-    image_path='./data/BCCD Dataset with mask/test/original/e11515b4-9527-4c23-a0ba-43719bacca0d.png',
-    mask_path='./data/BCCD Dataset with mask/test/mask/e11515b4-9527-4c23-a0ba-43719bacca0d.png',
+    model_path='./models/unet_best-8-5-16-26.pth',
+    # image_path='./data/BCCD Dataset with mask/test/original/e11515b4-9527-4c23-a0ba-43719bacca0d.png',
+    # mask_path='./data/BCCD Dataset with mask/test/mask/e11515b4-9527-4c23-a0ba-43719bacca0d.png',
+    image_path='./data/Neutrophil4.jpg',
+    # image_path='./data/KRD-WBC dataset/Dataset/image/image298.jpg',
+    mask_path='./data/KRD-WBC dataset/Dataset/mask/mask298.jpg',
     save_overlay=True  # Lưu ảnh overlay vào thư mục assets
 )
