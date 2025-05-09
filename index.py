@@ -398,7 +398,7 @@ class BloodCellSegmentationApp(QMainWindow):
             
             # Khởi tạo mô hình
             model = UNet(n_channels=3, n_classes=1).to(device)
-            model.load_state_dict(torch.load('./models/unet_best.pth', map_location=device, weights_only=True))
+            model.load_state_dict(torch.load('./models/unet_best-8-5-16-26.pth', map_location=device, weights_only=True))
             model.eval()
             
             # Đọc ảnh để xử lý với PIL

@@ -100,6 +100,21 @@ def visualize_prediction_binary_with_accuracy(model_path, image_path, mask_path,
     total_pixels = mask_true_binary.size
     accuracy = correct_pixels / total_pixels
 
+    # ✅ Tính toán các metrics khác
+    intersection = np.sum(pred_mask_binary_resized * mask_true_binary)
+    union = np.sum(pred_mask_binary_resized) + np.sum(mask_true_binary) - intersection
+
+    iou = intersection / union if union > 0 else 0.0
+    dice = (2 * intersection) / (np.sum(pred_mask_binary_resized) + np.sum(mask_true_binary)) if (np.sum(pred_mask_binary_resized) + np.sum(mask_true_binary)) > 0 else 0.0
+
+    # True Positives, False Positives, False Negatives
+    tp = intersection
+    fp = np.sum(pred_mask_binary_resized) - tp
+    fn = np.sum(mask_true_binary) - tp
+
+    precision = tp / (tp + fp) if (tp + fp) > 0 else 0.0
+    recall = tp / (tp + fn) if (tp + fn) > 0 else 0.0
+
     # ✅ Tạo overlay màu
     overlayed_image, colored_mask = visualize_segmentation_map_binary(image, pred_mask_binary_resized)
     overlayed_true, colored_mask_true = visualize_segmentation_map_binary(image, mask_true_binary)
@@ -123,9 +138,9 @@ def visualize_prediction_binary_with_accuracy(model_path, image_path, mask_path,
     ax[3].set_title("Overlay Dự Đoán")
     ax[3].axis("off")
 
-    plt.suptitle(f"Pixel Accuracy: {accuracy:.4f}", fontsize=16)
+    plt.suptitle(f"Pixel Accuracy: {accuracy:.4f} | IoU: {iou:.4f} | Dice: {dice:.4f}\nPrecision: {precision:.4f} | Recall: {recall:.4f}", fontsize=14)
     plt.tight_layout()
-    plt.subplots_adjust(top=0.85)
+    plt.subplots_adjust(top=0.80) # Adjusted top to make space for longer title
     plt.show()
 
     # ✅ Lưu ảnh nếu cần
@@ -144,15 +159,19 @@ def visualize_prediction_binary_with_accuracy(model_path, image_path, mask_path,
     # ✅ Debug min-max mask
     print(f"🎯 Mask Thật: min={mask_true_binary.min()}, max={mask_true_binary.max()}")
     print(f"🎯 Mask Dự Đoán: min={pred_mask_binary_resized.min()}, max={pred_mask_binary_resized.max()}")
-    print(f"🎯 Pixel Accuracy: {accuracy:.4f}")
+    print(f"📊 Pixel Accuracy: {accuracy:.4f}")
+    print(f"📊 IoU (Jaccard Index): {iou:.4f}")
+    print(f"📊 Dice Score (F1 Score): {dice:.4f}")
+    print(f"📊 Precision: {precision:.4f}")
+    print(f"📊 Recall: {recall:.4f}")
 
 # 🔥 Gọi hàm kiểm tra (đã cập nhật cho 2 class và accuracy)
 visualize_prediction_binary_with_accuracy(
     model_path='./models/unet_best-8-5-16-26.pth',
     # image_path='./data/BCCD Dataset with mask/test/original/e11515b4-9527-4c23-a0ba-43719bacca0d.png',
     # mask_path='./data/BCCD Dataset with mask/test/mask/e11515b4-9527-4c23-a0ba-43719bacca0d.png',
-    image_path='./data/Neutrophil4.jpg',
-    # image_path='./data/KRD-WBC dataset/Dataset/image/image298.jpg',
-    mask_path='./data/KRD-WBC dataset/Dataset/mask/mask298.jpg',
+    # image_path='./data/neutro1.jpg',
+    image_path='./data/KRD-WBC dataset/Dataset/image/image288.jpg',
+    mask_path='./data/KRD-WBC dataset/Dataset/mask/mask288.jpg',
     save_overlay=True  # Lưu ảnh overlay vào thư mục assets
 )
